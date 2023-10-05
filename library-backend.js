@@ -132,6 +132,10 @@ const resolvers = {
     allBooks: (root, args) => {
       if (!args.author && !args.genre) {
         return books;
+      } else if (args.author && args.genre) {
+        let retval = books.filter((book) => book.genres.includes(args.genre));
+        retval = retval.filter((book) => book.author === args.author);
+        return retval;
       } else if (args.author) {
         return books.filter((book) => book.author === args.author);
       } else if (args.genre) {
@@ -144,8 +148,7 @@ const resolvers = {
           if (curr.author === a.name) {
             accum = accum + 1;
             return accum;
-          }
-          else return accum;
+          } else return accum;
         }, 0);
         return { ...a, bookCount };
       });
